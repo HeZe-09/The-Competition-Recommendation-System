@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <title>注册</title>
+    <link rel="stylesheet" href="/static/css/register.css">
+    <!-- Bootstrap core CSS -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+
+    <script type="text/javascript" src="/static/js/md5-min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.min.js"></script>
+
+</head>
+
+<body>
+    <div class="form-signin text-center">
+        <form method="post" action="/user/register/" onsubmit="return register()">
+            <img class="mb-4" src="/static/images/logo.jpg" alt="" width="72" height="72">
+            {% csrf_token %}
+            <div class="form-floating">
+                <input type="email" class="form-control" id="uname" name="uname" onblur="checkUname(this.value)" placeholder="name@example.com">
+                <span style="color: red" id="aSpan"></span>
+                <label for="uname">邮箱</label>
+            </div>
+            <div class="form-floating">
+                <input type="password" class="form-control" id="pwd" name="pwd" placeholder="Password">
+                <span style="color: red" id="pSpan"></span>
+                <label for="pwd">密码</label>
+            </div>
+
+            <button class="w-100 btn btn-lg btn-primary" type="submit">注册</button>
+            <p class="mt-4 mb-3 text-muted">&copy; 2021</p>
+        </form>
+    </div>
+
+
+    <script>
+        function isEmail(str) {
+            var reg = /^[a-zA-Z0-9_-]{6,}@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+            return reg.test(str);
+        }
+
+        //用户名唯一校验
+        function checkUname(username) {
+            var flag = false;
+            $.ajax({
+                url: '/user/checkUname/',
+                type: 'GET',
+                async: false,
+                data: {'uname': username},
+                success: function (result) {
+                    var cflag = result.flag;
+                    if (cflag) {
+                        flag = true;
+                        $('#aSpan').html('用户名已存在！')
+                    }
+                }
+            });
+
+            return flag;
+        }
+
+
+        function register() {
+            //获取输入框的值
+            var account = $('#uname').val();
+            var password = $('#pwd').val();
+
+            //简单校验
+            if (account.length < 6 || !isEmail(account) || checkUname(account)) {
+                $('#aSpan').text('邮箱格式错误');
+                return false;
+            }
+
+            if (password.length < 6) {
+                $('#pSpan').text('密码长度不能小于六位');
+                return false;
+            }
+
+            //将密码框内容进行md5加密
+            var hex_pwd = hex_md5(password);
+            $('#pwd').val(hex_pwd);
+
+            return true;
+        }
+
+    </script>
+</body>
+</html>

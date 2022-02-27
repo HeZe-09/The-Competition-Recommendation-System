@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <title>个人中心</title>
+
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- FontAwesome JS-->
+    <script defer src="https://use.fontawesome.com/releases/v5.7.1/js/all.js"></script>
+    <!-- Theme CSS -->
+    <link id="theme-style" rel="stylesheet" href="/static/css/theme-3.css">
+
+</head>
+<body>
+{% csrf_token %}
+    <header class="header text-center">
+
+        <h1 class="blog-name pt-lg-4 mb-0"><a href="index.html">个人中心</a></h1>
+
+        <nav class="navbar navbar-expand-lg navbar-dark">
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation"
+                    aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div id="navigation" class="collapse navbar-collapse flex-column">
+                <div class="profile-section pt-3 pt-lg-0">
+                    <img class="profile-image mb-3 rounded-circle mx-auto" src="/static/images/profile.png" alt="image">
+
+                    <div class="bio mb-3">[{{ suser.uname }}]</div>
+                    <hr>
+                </div><!--//profile-section-->
+
+                <ul class="navbar-nav flex-column text-left">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/"><i class="fas fa-home fa-fw mr-2"></i>回到首页</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fas fa-bookmark fa-fw mr-2"></i>我的参赛</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fas fa-bookmark fa-fw mr-2"></i>我的收藏</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fas fa-bookmark fa-fw mr-2"></i>我的订单</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fas fa-user fa-fw mr-2"></i>地址管理</a>
+                    </li>
+                </ul>
+
+                <div class="my-2 my-md-3">
+                    <a class="btn btn-primary fr logout" target="_blank">[退出登录]</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <script src="/static/js/jquery-3.3.1.min.js"></script>
+    <script src="/static/js/popper.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+
+    <script>
+
+        $('.logout').click(function () {
+
+            $.ajax({
+                type: 'post',
+                url: '/user/logout/',
+                data: 'csrfmiddlewaretoken=' + $('input[name="csrfmiddlewaretoken"]').val(),
+                success: function (result) {
+
+                    if (result.delflag) {
+                        window.location.href = '/'
+                    }
+
+                }
+            })
+        })
+
+    </script>
+
+
+</body>
+</html>
+{#    <div class="Bott">#}
+{#        <div class="wrapper clearfix" style="margin: 0 auto">#}
+{#            <div class="zuo fl" style="margin-left: 100px">#}
+{#                <h3>#}
+{#                    <a href="/"><img src="/static/tx.png"></a>#}
+{#                    <p class="clearfix"><span class="fl">[{{ suser.uname }}]</span><span class="fr logout">[退出登录]</span>#}
+{#                    </p>#}
+{#                </h3>#}
+{#                <div>#}
+{#                    <ul>#}
+{#                        <li><a href="http://127.0.0.1:8000/user/usercenter/#">我的订单</a></li>#}
+{#                    </ul>#}
+{#                    <ul>#}
+{#                        <li><a href="/user/address/">地址管理</a></li>#}
+{#                    </ul>#}
+{#                    <ul>#}
+{#                        <li><a href="/">回到首页</a></li>#}
+{#                    </ul>#}
+{##}
+{#                </div>#}
+{#            </div>#}
+{#            <div class="you fl">#}
+{##}
+{#                <div class="tx clearfix">#}
+{#                    <div class="fl clearfix">#}
+{#                        <a href="/user/center/" class="fl"><img src="/static/tx.png"></a>#}
+{#                        <p class="fl"><span>六六六</span><a href="http://127.0.0.1:8000/user/usercenter/#">修改个人信息&gt;</a>#}
+{#                        </p>#}
+{#                    </div>#}
+{#                    <div class="fr">绑定邮箱：12****4@**.com</div>#}
+{#                </div>#}
+{#                <div class="bott">#}
+{#                    <div class="clearfix">#}
+{#                        <a href="http://127.0.0.1:8000/user/usercenter/#" class="fl"><img src="/static/gxin1.jpg"></a>#}
+{#                        <p class="fl"><span>待支付的订单：<strong>0</strong></span>#}
+{#                            <a href="http://127.0.0.1:8000/user/usercenter/#">查看待支付订单&gt;</a>#}
+{#                        </p>#}
+{#                    </div>#}
+{#                    <div class="clearfix">#}
+{#                        <a href="http://127.0.0.1:8000/user/usercenter/#" class="fl"><img src="/static/gxin2.jpg"></a>#}
+{#                        <p class="fl"><span>待收货的订单：<strong>0</strong></span>#}
+{#                            <a href="http://127.0.0.1:8000/user/usercenter/#">查看待收货订单&gt;</a>#}
+{#                        </p>#}
+{#                    </div>#}
+{#                </div>#}
+{##}
+{#            </div>#}
+{##}
+{#        </div>#}
+{#    </div>#}
+{##}
+

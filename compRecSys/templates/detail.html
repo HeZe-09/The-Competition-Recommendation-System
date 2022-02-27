@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block title %}竞赛详情页{% endblock %}
+
+{% block main %}
+
+    <section class="section section-lg bg-default">
+        <div class="container">
+            <div class="row row-30 align-items-center justify-content-center justify-content-md-left">
+                <div class="col-md-10 col-lg-6 col-xl-7">
+                    <div class="inset-1">
+                        <h1>{{ comp.name }}</h1>
+                        <div class="mt-xl-40">
+                            <h2>主办方</h2>
+                                <p>{{ comp.sponsor }}</p>
+                            <h2>竞赛级别</h2>
+                                <p>{{ comp.level }}</p>
+                            <h2>报名状态</h2>
+                                <p>{{ comp.state }}</p>
+                        </div>
+                        <button type="button" class="btn btn-outline-primary me-2"
+                        onclick="javascript:window.location.href='#'">我要报名
+                        </button>
+                        <button type="button" class="btn btn-outline-primary me-2"
+                        onclick="javascript:window.location.href='#'">加入收藏
+                        </button>
+                    </div>
+
+                </div>
+                <div class="col-md-10 col-lg-6 col-xl-5"><img class="img-responsive"
+                                                              src="/static/images/card.png" alt=""
+                                                              width="600" height="416"/>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <div class="goods-model mb-4" style="margin-right: -18px;text-align: center">
+        <img src="/static/images/recommend.png" style="position: relative;left: -10px;top: 10px">
+    </div>
+
+    <section class="text-center">
+
+        <!--Grid row-->
+        <div class="row mb-4 wow fadeIn">
+            {% for recommend in recommendList %}
+                <!--Grid column-->
+                <div class="col-lg-4 col-md-12 mb-4">
+
+                    <!--Card-->
+                    <div class="card">
+
+                        <!--Card image-->
+                        <div class="view overlay">
+                            <a href="/compdetail/{{ recommend.id }}">
+                                <img src="/static/images/card.png" class="card-img-top" alt="">
+                            </a>
+                        </div>
+
+                        <!--Card content-->
+                        <div class="card-body">
+                            <!--Title-->
+                            <h4 class="card-title">{{ recommend.name }}</h4>
+                            <!--Text-->
+                            <p class="card-text">主办方：{{ recommend.sponsor }}</p>
+                            <a href="/compdetail/{{ recommend.id }}" target="_blank" class="btn btn-primary btn-md">更多
+                                <i class="fas fa-download ml-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <!--/.Card-->
+                </div>
+                <!--Grid column-->
+            {% endfor %}
+        </div>
+
+    </section>
+
+{% endblock %}
+

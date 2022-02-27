@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <link rel="stylesheet" href="/static/css/bootstrap.css">
+    <link rel="stylesheet" href="/static/css/login.css">
+    <script src="/static/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/js/md5-min.js"></script>
+</head>
+<body class="text-center">
+<main class="form-signin">
+    <form method="post" action="/user/login/" onsubmit="return login();">
+        <img class="mb-4" src="/static/images/logo.jpg" alt="" width="72" height="72">
+            {% csrf_token %}
+        <div class="form-floating">
+            <input type="email" class="form-control" id="uname" name="uname" placeholder="name@example.com">
+            <span style="color: red" id="aSpan"></span>
+            <label for="uname">邮箱</label>
+        </div>
+        <div class="form-floating">
+            <input type="password" class="form-control" id="pwd" name="pwd" placeholder="Password">
+            <span style="color: red" id="pSpan"></span>
+            <label for="pwd">密码</label>
+        </div>
+        <input type="text" style="height:36px;width: 100px;" id="code" onblur="checkCode(this.value)"><img
+            src="/user/loadCode.jpg/" onclick="changeCode(this)"><span style="color:red;" id="cSpan"></span>
+
+        <input type="hidden" name="redirect" value="{{ redirect }}">
+        <input type="hidden" name="cartitems" value="{{ cartitems }}">
+        <button class="w-100 btn btn-lg btn-primary" type="submit">登录</button>
+        <p class="mt-5 mb-3 text-muted">&copy; 2021</p>
+    </form>
+</main>
+
+<script>
+    //切换验证码
+    function changeCode(imgObj) {
+        imgObj.src = '/user/loadCode.jpg?time=' + new Date().getTime();
+    }
+
+
+    function isEmail(str) {
+        var reg = /^[a-zA-Z0-9_-]{6,}@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+        return reg.test(str);
+    }
+
+    function login() {
+        //获取输入框的值
+        var account = $('#uname').val();
+        var password = $('#pwd').val();
+
+        //简单校验
+        if (account.length < 6 || !isEmail(account)) {
+            $('#aSpan').text('邮箱格式错误');
+            return false;
+        }
+
+        if (password.length < 6) {
+            $('#pSpan').text('密码长度不能小于六位');
+            return false;
+        }
+
+        var code = $('#code').val();
+        var cflag = checkCode(code);
+
+        if (!cflag) {
+            $('#cSpan').text('×');
+            return false;
+        }
+
+
+        var hex_pwd = hex_md5(password);
+
+        //var hex_pwd = hex_md5(password+time)
+        $('#pwd').val(hex_pwd);
+
+        return true;
+
+    }
+
+
+    function checkCode(txt) {
+        var cflag = false;
+        $.ajax({
+            url: '/user/checkCode/',
+            type: 'get',
+            data: {'code': txt},
+            async: false,
+            success: function (result) {
+                var flag = result.checkFlag;
+                if (flag) {
+                    cflag = true;
+                    $('#cSpan').text('√');
+                } else {
+                    $('#cSpan').text('×');
+                }
+            }
+        })
+
+        return cflag;
+
+    }
+
+</script>
+
+</body>
+</html>
